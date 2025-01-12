@@ -1,0 +1,120 @@
+"use client"; // Ensure this file is treated as a client component
+
+import { Box, Text, VStack, Image, Flex } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { useInView } from "react-intersection-observer";
+
+// Create a motion box and motion flex
+const MotionBox = motion(Box);
+const MotionFlex = motion(Flex);
+
+export const AIAgentItem = ({ agent }) => {
+  const { title, description, longDescription, powerLevel, capabilities, image, nextBotName } = agent;
+
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  return (
+    <MotionBox
+      ref={ref}
+      position="relative"
+      borderRadius="lg"
+      boxShadow="lg"
+      bg="whiteAlpha.50"
+      overflow="hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{
+        y: -10, // Moves the entire box up
+        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)", // Adds hover shadow
+      }}
+    >
+      <Box overflow="hidden" position="relative">
+        <MotionBox
+          as={Image}
+          src={image}
+          alt={`${title} Background`}
+          objectFit="cover"
+          width="100%"
+          height="200px"
+          borderTopRadius="lg"
+          initial={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }} // Grows the image on hover
+          transition={{ duration: 0.5 }}
+        />
+      </Box>
+
+      <Flex position="absolute" top="10px" left="10px" zIndex={2} p={4}>
+        <Text
+          position="absolute"
+          left={0}
+          top={0}
+          fontSize="xl"
+          role="img"
+          aria-label="Chatbot Emoji"
+        >
+          🤖
+        </Text>
+      </Flex>
+
+      <VStack spacing={4} align="start" p={6} zIndex={2} position="relative">
+        <Text fontSize="xl" fontWeight="bold" color="white">
+          {title}
+        </Text>
+        <Text fontSize="md" color="whiteAlpha.700">
+          {description}
+        </Text>
+
+        {/* Long description with two lines and ellipsis */}
+        <Text
+          fontSize="sm"
+          color="whiteAlpha.700"
+          noOfLines={2} // Ensure it limits to 2 lines with ellipsis
+        >
+          {longDescription}
+        </Text>
+
+        <Box my={4} height="1px" width="100%" bg="gray.600" />
+
+        <Flex justify="space-between" align="center" width="100%">
+          <Text fontSize="sm" color="whiteAlpha.700">
+            Power Level:
+          </Text>
+          <Text fontSize="sm" color="blue.400">
+            {powerLevel}%
+          </Text>
+        </Flex>
+
+        {/* Custom Progress Bar */}
+        <Box width="100%" bg="gray.600" borderRadius="md">
+          <Box
+            width={`${powerLevel}%`}
+            bg="blue.400"
+            height="8px"
+            borderRadius="md"
+          />
+        </Box>
+
+        <Flex justify="space-between" align="center" mt={4} width="100%">
+          <Text fontSize="md" fontWeight="bold" color="whiteAlpha.700">
+            {nextBotName}
+          </Text>
+          <MotionFlex
+            color="white"
+            fontSize="lg"
+            whileHover={{
+              x: 10, // Moves the arrow icon 10px to the right on hover
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <FaArrowRightLong />
+          </MotionFlex>
+        </Flex>
+      </VStack>
+    </MotionBox>
+  );
+};
