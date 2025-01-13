@@ -15,10 +15,10 @@ const Navbar = () => {
         </Link>
         <HStack spacing={8} mr={8}>
         <a href="/my-agents">
-        <Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}><FaUserGroup/>  My Agents</Button>
+        <Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}><FaUserGroup/>MY AGENTS</Button>
         </a>
-          <Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}>Documentation</Button>
-          <Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}>Support</Button>
+          <a href='explore-agents'><Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}>AI AGENTS</Button></a>
+          <Button fontSize="18px" variant="link" color={"white"} textDecoration={"none"}>SUPPORT</Button>
         </HStack>
       </Flex>
     </Box>

@@ -1,15 +1,16 @@
 "use client"; // Ensure this file is treated as a client component
 
-import { Box, Text, VStack, Image, Flex } from "@chakra-ui/react";
+import { Box, Text, VStack, Image, Flex, IconButton } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowRightLong, FaTrash } from "react-icons/fa6";
 import { useInView } from "react-intersection-observer";
+import { FaTrashCan } from "react-icons/fa6";
 
 // Create a motion box and motion flex
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
-export const AIAgentItem = ({ agent }) => {
+export const AIAgentItem = ({ agent, onDelete, showDeleteButton }) => {
   const { title, description, longDescription, powerLevel, capabilities, image, nextBotName } = agent;
 
   const { ref, inView } = useInView({
@@ -48,28 +49,29 @@ export const AIAgentItem = ({ agent }) => {
         />
       </Box>
 
-      <Flex position="absolute" top="10px" left="10px" zIndex={2} p={4}>
-        <Text
-          position="absolute"
-          left={0}
-          top={0}
-          fontSize="xl"
-          role="img"
-          aria-label="Chatbot Emoji"
-        >
-          🤖
-        </Text>
-      </Flex>
 
       <VStack spacing={4} align="start" p={6} zIndex={2} position="relative">
-        <Text fontSize="xl" fontWeight="bold" color="white">
+      <Flex w={'full'} justifyContent={"space-between"}>
+      <Text fontSize="xl" fontWeight="bold" color="white">
           {title}
         </Text>
+        {showDeleteButton && (
+      <Text
+        onClick={onDelete}
+        color="red.500" // Change color to make it visible
+        cursor="pointer" // Change cursor to pointer to indicate clickability
+        fontSize="lg" // Adjust size as necessary
+        aria-label="Delete agent"
+      >
+        DELETE
+      </Text>
+    )}
+      </Flex>
+      
         <Text fontSize="md" color="whiteAlpha.700">
           {description}
         </Text>
 
-        {/* Long description with two lines and ellipsis */}
         <Text
           fontSize="sm"
           color="whiteAlpha.700"
@@ -89,7 +91,6 @@ export const AIAgentItem = ({ agent }) => {
           </Text>
         </Flex>
 
-        {/* Custom Progress Bar */}
         <Box width="100%" bg="gray.600" borderRadius="md">
           <Box
             width={`${powerLevel}%`}
@@ -100,9 +101,12 @@ export const AIAgentItem = ({ agent }) => {
         </Box>
 
         <Flex justify="space-between" align="center" mt={4} width="100%">
-          <Text fontSize="md" fontWeight="bold" color="whiteAlpha.700">
-            {nextBotName}
-          </Text>
+          <Flex align="center">
+            <Text fontSize="md" fontWeight="bold" color="whiteAlpha.700" mr={2}>
+              {nextBotName}
+            </Text>
+
+          </Flex>
           <MotionFlex
             color="white"
             fontSize="lg"

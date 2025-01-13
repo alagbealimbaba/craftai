@@ -1,210 +1,95 @@
 "use client";
 
-import { Flex, Heading, Text, Button } from "@chakra-ui/react";
+import { Flex, Heading, Text, Button, VStack, Box, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
-import { BsChatLeft } from "react-icons/bs";
-import { FaBrain} from "react-icons/fa";
-import { FaArrowLeftLong, FaUserGroup } from "react-icons/fa6";
-import { HiOutlineLightningBolt } from "react-icons/hi";
 import { motion } from "framer-motion";
+import { FaBrain } from "react-icons/fa";
+import { BsChatLeft } from "react-icons/bs";
+import { HiOutlineLightningBolt } from "react-icons/hi";
 
-
-const MotionHeading = motion.create(Heading);
-const MotionText = motion.create(Text);
-const MotionButton = motion(Button);
-
+const MotionHeading = motion(Heading);
+const MotionText = motion(Text);
 
 export default function CreateAgent() {
-  // State for form inputs
-  const [agentImage, setAgentImage] = useState("");
-  const [agentName, setAgentName] = useState("");  // Updated state for agent name
-  const [primaryPurpose, setPrimaryPurpose] = useState("");
+  const [image, setImage] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [personalityTraits, setPersonalityTraits] = useState([]);
-  const [responseLength, setResponseLength] = useState("Balanced");
-  const [communicationStyle, setCommunicationStyle] = useState("Friendly and Casual");
-  const [learningStyle, setLearningStyle] = useState("Adaptive Learning");
+  const [longDescription, setLongDescription] = useState("");
+  const [powerLevel, setPowerLevel] = useState(0);
+  const [capabilities, setCapabilities] = useState("");
+  const [nextBotName, setNextBotName] = useState("");
 
   const handleSubmit = () => {
-    console.log({
-      agentImage,
-      agentName,  
-      primaryPurpose,
+    const newAgent = {
+      title,
       description,
-      personalityTraits,
-      responseLength,
-      communicationStyle,
-      learningStyle,
-    });
+      longDescription,
+      powerLevel,
+      capabilities,
+      image,
+      nextBotName,
+    };
+
+    // Save the agent to local storage
+    const existingAgents = JSON.parse(localStorage.getItem("agents")) || [];
+    existingAgents.push(newAgent);
+    localStorage.setItem("agents", JSON.stringify(existingAgents));
+
+    // Redirect to My Agents page after creation
+    window.location.href = "/my-agents";
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "black",
-        color: "white",
-        padding: "20px 0",
-      }}
-    >
-      {/* Back Button */}
-
-
-      {/* Header Section */}
-     <Flex justify="center" align="center" direction="column">
-     <Link href="/">
-        <button
-          style={{
-            background: "none",
-            fontSize: "16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            cursor: "pointer",
-            padding: "5px",
-            width:"80vw",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.transform = "translateX(-5px)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.transform = "translateX(0)")
-          }
-        >
-          <FaArrowLeftLong
-            style={{ marginRight: "8px", transition: "all 0.3s ease-in-out", textAlign:"left" }}
-          />
-          Back
-        </button>
-      </Link>
-             <MotionHeading
-               size={{ base: '2xl', lg: '5xl' }}
-               textAlign="center"
-               color="white"
-               initial={{ y: -50 }}
-               animate={{ y: 0 }}
-               transition={{ duration: 0.5, delay: 0.2 }}
-             >
-               CREATE AGENT
-             </MotionHeading>
-             <MotionText
-               fontSize="xl"
-               textAlign="center"
-               color={"white/60"}
-               mt={4}
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.4 }}
-             >
-              Design your perfect AI companion by defining its personality, expertise, and purpose
-             </MotionText>
-             <a href="/my-agents">
-             <Button
-            my={8}
-            bg="#1a1a1a"
-            color="white"
-            px={8}
-            py={6}
-            borderRadius="10px"
-            _hover={{ bg: "gray.700" }}
-        >
-        <FaUserGroup fontSize={"10px"}/>
-          View My Agents
-        </Button>
-        </a>
-           </Flex>
+    <div style={{ display: "flex", flexDirection: "column", backgroundColor: "black", color: "white", padding: "20px 0" }}>
+      <Flex justify="center" align="center" direction="column">
+        <Link href="/">
+          <button style={{ background: "none", fontSize: "16px", cursor: "pointer", padding: "5px", width: "80vw" }}>
+            Back
+          </button>
+        </Link>
+        <MotionHeading size={{ base: '2xl', lg: '5xl' }} textAlign="center" color="white">
+          CREATE AGENT
+        </MotionHeading>
+        <MotionText fontSize="xl" textAlign="center" color={"white/60"} mt={4}>
+          Design your perfect AI companion by defining its personality, expertise, and purpose
+        </MotionText>
+      </Flex>
 
       <Flex gap={4} justifyContent={"center"} alignContent={"center"}>
-        {/* Form Section */}
-        <div
-          style={{
-            width: "40%",
-            border: "1px solid #262626",
-            marginTop: "32px",
-            padding: "20px 28px",
-            borderRadius: "8px",
-          }}
-        >
+        <div style={{ width: "40%", marginTop: "32px", padding: "20px 28px", borderRadius: "8px", border: "1px solid #262626" }}>
           {/* Image Upload Section */}
-          <label
-            style={{
-              color: "white",
-              marginBottom: "8px",
-              display: "block",
-            }}
-            htmlFor="agent-image"
-          >
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-image">
             Agent Image
           </label>
-
-          <div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "2px dashed #7a858d",
-    padding: "0",
-    marginTop: "20px",
-    borderRadius: "8px",
-    height: "120px",
-    width: "120px",
-    marginBottom: "16px",
-    cursor: "pointer",
-    position: "relative",
-  }}
-  onClick={() => document.getElementById('file-input').click()}
->
-  {agentImage ? (
-    <img
-      src={agentImage}
-      alt="Agent"
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        borderRadius: "8px",
-        objectFit: "cover",
-      }}
-    />
-  ) : (
-    <>
-      <span style={{ color: "#7a858d", fontSize: "24px" }}>+</span>
-      <span style={{ color: "#7a858d", fontSize: "12px" }}>Upload an Image</span>
-    </>
-  )}
-</div>
-
           <input
             type="file"
-            id="file-input"
             accept="image/*"
-            style={{ display: "none" }}
+            id="agent-image"
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                  setAgentImage(reader.result);
+                  setImage(reader.result);
                 };
                 reader.readAsDataURL(file);
               }
             }}
+            style={{ marginBottom: "16px" }}
           />
+          {image && <img src={image} alt="Agent" style={{ width: "100%", height: "auto", borderRadius: "8px", marginBottom: "16px" }} />}
 
-          {/* Other input fields */}
-          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-name">
-            Agent Name *
+          {/* Title Input */}
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-title">
+            Agent Title *
           </label>
           <input
-            id="agent-name"
+            id="agent-title"
             type="text"
-            placeholder="e.g., Atlas, Nova, Cipher"
-            value={agentName}  // Bind input to agentName state
-            onChange={(e) => setAgentName(e.target.value)}  // Update agentName on change
+            placeholder="e.g., Atlas, Nova"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
@@ -216,14 +101,15 @@ export default function CreateAgent() {
             }}
           />
 
-          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="personality-description">
-            Personality Description *
+          {/* Description Input */}
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-description">
+            Short Description *
           </label>
           <textarea
-            id="personality-description"
-            placeholder="Describe your agent's personality and approach..."
-            value={description}  // Bind textarea to description state
-            onChange={(e) => setDescription(e.target.value)}  // Update description on change
+            id="agent-description"
+            placeholder="Describe your agent..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
@@ -233,18 +119,21 @@ export default function CreateAgent() {
               backgroundColor: "#1d1d1d",
               color: "white",
               resize: "vertical",
-              height: "200px",
+              height: "80px",
             }}
           />
 
-          {/* Communication Style */}
-          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="communication-style">
-            Communication Style *
+          {/* Power Level Input */}
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-power-level">
+            Power Level (0-100) *
           </label>
-          <select
-            id="communication-style"
-            value={communicationStyle}
-            onChange={(e) => setCommunicationStyle(e.target.value)}
+          <input
+            id="agent-power-level"
+            type="number"
+            min="0"
+            max="100"
+            value={powerLevel}
+            onChange={(e) => setPowerLevel(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
@@ -254,21 +143,18 @@ export default function CreateAgent() {
               backgroundColor: "#1d1d1d",
               color: "white",
             }}
-          >
-            <option value="Friendly and Casual">Friendly and Casual</option>
-            <option value="Formal">Formal</option>
-            <option value="Concise">Concise</option>
-            <option value="Detailed">Detailed</option>
-          </select>
+          />
 
-          {/* Learning Style */}
-          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="learning-style">
-            Learning Style *
+          {/* Capabilities Input */}
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-capabilities">
+            Capabilities *
           </label>
-          <select
-            id="learning-style"
-            value={learningStyle}
-            onChange={(e) => setLearningStyle(e.target.value)}
+          <input
+            id="agent-capabilities"
+            type="text"
+            placeholder="e.g., Data Analysis, Chatbot"
+            value={capabilities}
+            onChange={(e) => setCapabilities(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
@@ -278,20 +164,18 @@ export default function CreateAgent() {
               backgroundColor: "#1d1d1d",
               color: "white",
             }}
-          >
-            <option value="Adaptive Learning">Adaptive Learning</option>
-            <option value="Static Learning">Static Learning</option>
-            <option value="Collaborative Learning">Collaborative Learning</option>
-          </select>
+          />
 
-          {/* Response Length */}
-          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="response-length">
-            Response Length *
+          {/* Next Bot Name Input */}
+          <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-next-bot-name">
+            Next Bot Name *
           </label>
-          <select
-            id="response-length"
-            value={responseLength}
-            onChange={(e) => setResponseLength(e.target.value)}
+          <input
+            id="agent-next-bot-name"
+            type="text"
+            placeholder="e.g., Companion Bot"
+            value={nextBotName}
+            onChange={(e) => setNextBotName(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
@@ -301,11 +185,7 @@ export default function CreateAgent() {
               backgroundColor: "#1d1d1d",
               color: "white",
             }}
-          >
-            <option value="Concise">Concise</option>
-            <option value="Balanced">Balanced</option>
-            <option value="Elaborate">Elaborate</option>
-          </select>
+          />
 
           {/* Create Agent Button */}
           <button
@@ -326,29 +206,18 @@ export default function CreateAgent() {
           </button>
         </div>
 
-        {/* Dashboard Section */}
-        <div
-          style={{
-            width: "40%",
-            height: "fit-content",
-            border: "1px solid #262626",
-            marginTop: "32px",
-            padding: "24px",
-            borderRadius: "8px",
-            backgroundColor: "#0d0d0d",
-            gap: "20px",
-          }}
-        >
+        {/* Updated Real-Time Dashboard */}
+        <div style={{ width: "40%", border: "1px solid #262626", marginTop: "32px", padding: "24px", borderRadius: "8px", backgroundColor: "#0d0d0d" }}>
           {/* Agent Information */}
           <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-  <div style={{ display: "flex", justifyContent: "center", borderRadius: "50%", backgroundColor: "#1d1d1d", height: "60px", width: "60px", }}>
-    <img src="./CrateBg.png" style={{ width: "40px", height: "40px", marginTop: "10px" }} />
-  </div>
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-    <h2 style={{ color: "white", fontSize: "20px", fontWeight: 700 }}>{agentName || "Your Agent"}</h2>
-    <p style={{ fontSize: "14px", color: "#7a858d" }}>Data-Analysis</p>
-  </div>
-</div>
+            <div style={{ display: "flex", justifyContent: "center", borderRadius: "50%", backgroundColor: "#1d1d1d", height: "60px", width: "60px" }}>
+              <img src={image || "./CrateBg.png"} style={{ width: "40px", height: "40px", marginTop: "10px" }} alt="Agent Icon" />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <h2 style={{ color: "white", fontSize: "20px", fontWeight: 700 }}>{title || "Your Agent"}</h2>
+              <p style={{ fontSize: "14px", color: "#7a858d" }}>{capabilities || "Capabilities"}</p>
+            </div>
+          </div>
 
           {/* Personality Section */}
           <div style={{ marginBottom: "16px", border: "1px solid #292929", borderRadius: "10px", padding: "1rem", backgroundColor: "#191919" }}>
@@ -357,7 +226,7 @@ export default function CreateAgent() {
               Personality
             </h3>
             <p style={{ color: "#7a858d", fontSize: "14px" }}>
-              {description || "Personality description will appear here..."} {/* Display personality description */}
+              {description || "Personality description will appear here..."}
             </p>
           </div>
 
@@ -369,15 +238,15 @@ export default function CreateAgent() {
             </h3>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
               <span>Specialization</span>
-              <span>{primaryPurpose || "Data-Analysis"}</span>
+              <span>{capabilities || "N/A"}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
               <span>Learning Style</span>
-              <span>{learningStyle || "N/A"}</span>
+              <span>{"Visual"}</span> {/* This can be adjusted dynamically if needed */}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
               <span>Memory Depth</span>
-              <span>Medium</span>
+              <span>Medium</span> {/* This can also be adjusted */}
             </div>
           </div>
 
@@ -389,14 +258,13 @@ export default function CreateAgent() {
             </h3>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
               <span>Style</span>
-              <span>{communicationStyle}</span>
+              <span>{"Concise"}</span> {/* Adjust as necessary */}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
               <span>Response Length</span>
-              <span>{responseLength}</span>
+              <span>{"Short"}</span> {/* Adjust as necessary */}
             </div>
           </div>
-
         </div>
       </Flex>
     </div>
