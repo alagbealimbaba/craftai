@@ -1,60 +1,190 @@
-"use client";
-import { Box, Flex, Heading, Textarea, Button, Text } from "@chakra-ui/react";
+"use client"; // Ensure this is a client component
+
+import { useSearchParams } from "next/navigation";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  VStack,
+  HStack,
+  Button,
+  Input,
+  Spinner,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { useChat } from "ai/react";
+import { useEffect, useState, useRef } from "react";
+import { FiMic, FiCalendar, FiSend } from "react-icons/fi";
+import { HiLightBulb, HiMap } from "react-icons/hi";
 
-// Define the ChatComponent function
-function ChatComponent() {
-    const { input, handleInputChange, handleSubmit, messages } = useChat();
-
-    console.log(messages);
-    console.log(input);
-
-    return (
-        <div>
-            {messages.map((message) => (
-                <div key={message.id}>
-                    {/* Name of person talking */}
-                    <Heading as="h3" size="md" className="mt-2" color={message.role === "assistant" ? "blue.400" : "green.400"}>
-                        {message.role === "assistant" ? "GPT-4" : "User"}
-                    </Heading>
-
-                    {/* Formatting the message */}
-                    {message.content.split("\n").map((currentTextBlock, index) => (
-                        <Text key={message.id + index} mt={1}>
-                            {currentTextBlock === "" ? " " : currentTextBlock}
-                        </Text>
-                    ))}
-                </div>
-            ))}
-
-            <form className="mt-12" onSubmit={handleSubmit}>
-                <Textarea
-                    className="mt-2"
-                    placeholder="What are data structures and algorithms?"
-                    value={input}
-                    onChange={handleInputChange}
-                    bg="gray.600"
-                    color="white"
-                    resize="none"
-                />
-                <Button className="rounded-md mt-2" colorScheme="blue" type="submit">
-                    Send message
-                </Button>
-            </form>
-        </div>
-    );
-}
-
-// Define the ChatPage function
 export default function ChatPage() {
-    return (
-        <Flex direction="column" align="center" justify="center" minH="100vh" p={6}>
-            <Box bg="gray.700" p={4} width={{ base: "90%", md: "800px" }} borderRadius="md" color="white">
-                <Heading as="h2" size="lg" color="white">
-                    GPT-4 Streaming Chat Application
-                </Heading>
-                <ChatComponent />
-            </Box>
-        </Flex>
-    );
+  const searchParams = useSearchParams();
+  const { input, handleInputChange, handleSubmit, messages, isLoading } = useChat();
+  const [parsedAgent, setParsedAgent] = useState(null);
+  const messagesEndRef = useRef(null); // Reference for scrolling
+
+  useEffect(() => {
+    const agentParam = searchParams.get("agent");
+    if (agentParam) {
+      try {
+        const agentData = JSON.parse(decodeURIComponent(agentParam));
+        console.log("Parsed Agent Data:", agentData);
+        setParsedAgent(agentData);
+      } catch (error) {
+        console.error("Error parsing agent data:", error);
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  return (
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      direction="column"
+      minH="100vh"
+      bg="black"
+      color="white"
+      p={{ base: 2, md: 4 }}
+    >
+      {/* Header Section */}
+      <Heading as="h1" size={{ base: "lg", md: "2xl" }} mb={2} color="teal.300" textAlign="center">
+        Hello, User
+      </Heading>
+      <Text fontSize={{ base: "sm", md: "lg" }} color="fg.muted" mb={4} textAlign="center">
+        How can I help you today?
+      </Text>
+
+      {/* Suggested Questions */}
+      <SimpleGrid columns={{ base: 2, md: 4 }} gap={2} mb={4} maxW="100%">
+        {[
+          { text: "What's the best weather to you?", icon: HiLightBulb },
+          { text: "Share the simplest tips for writing an essay", icon: HiMap },
+          { text: "What does React.js do?", icon: FiCalendar },
+          { text: "Recommend some books I can read", icon: FiMic },
+        ].map((item, index) => (
+          <Box
+            key={index}
+            p={{ base: 2, md: 4 }}
+            borderRadius="md"
+            bg="gray.800"
+            color="teal.300"
+            boxShadow="lg"
+            cursor="pointer"
+            textAlign="center"
+            _hover={{ bg: "gray.700" }}
+            onClick={() =>
+              handleInputChange({ target: { value: item.text } })
+            }
+          >
+            <VStack spacing={1}>
+              <item.icon size="20" />
+              <Text fontSize={{ base: "xs", md: "sm" }}>{item.text}</Text>
+            </VStack>
+          </Box>
+        ))}
+      </SimpleGrid>
+
+      {/* Message Container */}
+      <Box
+        bg="gray.900"
+        p={{ base: 2, md: 4 }}
+        width={{base:'100%', md:'80%'}}
+        maxW="100%"
+        flex="1"
+        borderRadius="md"
+        color="white"
+        overflowY="auto"
+        boxShadow="lg"
+        border="1px"
+        borderColor="gray.600"
+        display="flex"
+        flexDirection="column"
+        mb={4}
+      >
+        <VStack spacing={2} align="stretch" flex="1" overflowY="auto">
+          {messages.map((message) => (
+            <HStack
+              key={message.id}
+              justifyContent={
+                message.role === "assistant" ? "flex-end" : "flex-start"
+              }
+            >
+              <Box
+                p={{ base: 2, md: 3 }}
+                borderRadius="md"
+                bg={message.role === "assistant" ? "teal.500" : "teal.700"}
+                maxWidth="80%"
+                boxShadow="md"
+              >
+                <Text color="white" fontWeight="bold" mb={1} fontSize="sm">
+                  {message.role === "assistant" ? "GPT-4" : "You"}
+                </Text>
+                <Text fontSize="sm">
+                  {message.content.split("\n").map((textBlock, index) => (
+                    <span key={message.id + index}>
+                      {textBlock === "" ? <br /> : textBlock}
+                    </span>
+                  ))}
+                </Text>
+              </Box>
+            </HStack>
+          ))}
+          <div ref={messagesEndRef} /> {/* Scroll target */}
+        </VStack>
+        {isLoading && (
+          <Flex justifyContent="center" alignItems="center" mt={2}>
+            <Spinner size="sm" color="teal.300" />
+            <Text ml={2} fontSize="sm">Loading...</Text>
+          </Flex>
+        )}
+      </Box>
+
+      {/* Input Area */}
+      <HStack
+        width={{base:'100%', md:'80%'}}
+        maxW="100%"
+        bg="gray.800"
+        borderRadius="md"
+        padding={2}
+        boxShadow="lg"
+        alignItems="center"
+      >
+        <Input
+          placeholder="Ask me anything..."
+          value={input}
+          onChange={handleInputChange}
+          bg="gray.700"
+          color="white"
+          border="none"
+          flex="1"
+          height="36px"
+          fontSize="sm"
+          _focus={{ borderColor: "teal.500" }}
+          _placeholder={{ color: "gray.500" }}
+        />
+        <Button
+          colorScheme="teal"
+          variant="ghost"
+          onClick={handleSubmit}
+          bg="teal.600"
+          _hover={{ bg: "teal.700" }}
+          size="sm"
+        >
+          <FiSend />
+        </Button>
+      </HStack>
+
+      {/* Footer */}
+      <Text fontSize="xs" color="fg.muted" mt={4} textAlign="center">
+        The AI model can make mistakes.
+      </Text>
+    </Flex>
+  );
 }

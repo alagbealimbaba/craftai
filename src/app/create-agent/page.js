@@ -1,12 +1,13 @@
 "use client";
 
-import { Flex, Heading, Text, Button, VStack, Box, Image } from "@chakra-ui/react";
+import { Flex, Heading, Text, Button, VStack, Box, Image, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaBrain } from "react-icons/fa";
 import { BsChatLeft } from "react-icons/bs";
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const MotionHeading = motion(Heading);
 const MotionText = motion(Text);
@@ -41,23 +42,30 @@ export default function CreateAgent() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", backgroundColor: "black", color: "white", padding: "20px 0" }}>
+    <Box display="flex" flexDirection="column" backgroundColor="black" color="white" padding={{ base: "20px", md: "40px" }}>
       <Flex justify="center" align="center" direction="column">
         <Link href="/">
-          <button style={{ background: "none", fontSize: "16px", cursor: "pointer", padding: "5px", width: "80vw" }}>
+          <Button
+            variant="link"
+            color="white"
+            justifyContent="flex-start"
+            padding="5px"
+            width="80vw"
+          >
+          <FaArrowLeftLong />
             Back
-          </button>
+          </Button>
         </Link>
-        <MotionHeading size={{ base: '2xl', lg: '5xl' }} textAlign="center" color="white">
+        <MotionHeading size={{ base: 'xl', md: '5xl' }} textAlign="center" color="white">
           CREATE AGENT
         </MotionHeading>
-        <MotionText fontSize="xl" textAlign="center" color={"white/60"} mt={4}>
+        <MotionText fontSize={{ base: "lg", md: "xl" }} textAlign="center" color={"whiteAlpha.600"} mt={4}>
           Design your perfect AI companion by defining its personality, expertise, and purpose
         </MotionText>
       </Flex>
 
-      <Flex gap={4} justifyContent={"center"} alignContent={"center"}>
-        <div style={{ width: "40%", marginTop: "32px", padding: "20px 28px", borderRadius: "8px", border: "1px solid #262626" }}>
+      <Flex gap={4} justifyContent={"center"} alignContent={"center"} flexDirection={{ base: "column-reverse", md: "row" }}>
+        <Box width={{ base: "100%", md: "40%" }} marginTop="32px" padding="20px" borderRadius="8px" border="1px solid #262626">
           {/* Image Upload Section */}
           <label style={{ color: "white", marginBottom: "8px", display: "block" }} htmlFor="agent-image">
             Agent Image
@@ -188,85 +196,81 @@ export default function CreateAgent() {
           />
 
           {/* Create Agent Button */}
-          <button
+          <Button
             onClick={handleSubmit}
-            style={{
-              width: "100%",
-              padding: "10px",
-              borderRadius: "10px",
-              border: "none",
-              backgroundColor: "#4a90e2",
-              color: "white",
-              fontSize: "16px",
-              cursor: "pointer",
-              marginTop: "16px",
-            }}
+            width="100%"
+            padding="10px"
+            borderRadius="10px"
+            backgroundColor="#4a90e2"
+            color="white"
+            fontSize="16px"
+            marginTop="16px"
           >
             Create Agent
-          </button>
-        </div>
+          </Button>
+        </Box>
 
         {/* Updated Real-Time Dashboard */}
-        <div style={{ width: "40%", border: "1px solid #262626", marginTop: "32px", padding: "24px", borderRadius: "8px", backgroundColor: "#0d0d0d" }}>
+        <Box width={{ base: "100%", md: "40%" }} border="1px solid #262626" marginTop="32px" padding="24px" borderRadius="8px" backgroundColor="#0d0d0d">
           {/* Agent Information */}
-          <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "center", borderRadius: "50%", backgroundColor: "#1d1d1d", height: "60px", width: "60px" }}>
+          <Flex gap={2} marginBottom="10px">
+            <Box display="flex" justifyContent="center" borderRadius="50%" backgroundColor="#1d1d1d" height="60px" width="60px">
               <img src={image || "./CrateBg.png"} style={{ width: "40px", height: "40px", marginTop: "10px" }} alt="Agent Icon" />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-              <h2 style={{ color: "white", fontSize: "20px", fontWeight: 700 }}>{title || "Your Agent"}</h2>
-              <p style={{ fontSize: "14px", color: "#7a858d" }}>{capabilities || "Capabilities"}</p>
-            </div>
-          </div>
+            </Box>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <Text color="white" fontSize="20px" fontWeight="700">{title || "Your Agent"}</Text>
+              <Text fontSize="14px" color="#7a858d">{capabilities || "Capabilities"}</Text>
+            </Box>
+          </Flex>
 
           {/* Personality Section */}
-          <div style={{ marginBottom: "16px", border: "1px solid #292929", borderRadius: "10px", padding: "1rem", backgroundColor: "#191919" }}>
-            <h3 style={{ color: "#7a858d", display: "flex", alignItems: "center", fontSize: "14px", marginBottom: "5px" }}>
+          <Box marginBottom="16px" border="1px solid #292929" borderRadius="10px" padding="1rem" backgroundColor="#191919">
+            <Text color="#7a858d" display="flex" alignItems="center" fontSize="14px" marginBottom="5px">
               <FaBrain style={{ marginRight: "8px", marginTop: "0.5px" }} />
               Personality
-            </h3>
-            <p style={{ color: "#7a858d", fontSize: "14px" }}>
+            </Text>
+            <Text color="#7a858d" fontSize="14px">
               {description || "Personality description will appear here..."}
-            </p>
-          </div>
+            </Text>
+          </Box>
 
           {/* Capabilities Section */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "5px", marginBottom: "16px", border: "1px solid #292929", borderRadius: "10px", padding: "1rem", backgroundColor: "#191919" }}>
-            <h3 style={{ color: "#7a858d", display: "flex", alignItems: "center", fontSize: "14px", marginBottom: "5px" }}>
+          <Box display="flex" flexDirection="column" gap="5px" marginBottom="16px" border="1px solid #292929" borderRadius="10px" padding="1rem" backgroundColor="#191919">
+            <Text color="#7a858d" display="flex" alignItems="center" fontSize="14px" marginBottom="5px">
               <BsChatLeft style={{ marginRight: "8px", marginTop: "0.5px" }} />
               Capabilities
-            </h3>
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
-              <span>Specialization</span>
-              <span>{capabilities || "N/A"}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
-              <span>Learning Style</span>
-              <span>{"Visual"}</span> {/* This can be adjusted dynamically if needed */}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
-              <span>Memory Depth</span>
-              <span>Medium</span> {/* This can also be adjusted */}
-            </div>
-          </div>
+            </Text>
+            <Flex justifyContent="space-between" color="#7a858d" fontSize="14px">
+              <Text>Specialization</Text>
+              <Text>{capabilities || "N/A"}</Text>
+            </Flex>
+            <Flex justifyContent="space-between" color="#7a858d" fontSize="14px">
+              <Text>Learning Style</Text>
+              <Text>{"Visual"}</Text>
+            </Flex>
+            <Flex justifyContent="space-between" color="#7a858d" fontSize="14px">
+              <Text>Memory Depth</Text>
+              <Text>Medium</Text>
+            </Flex>
+          </Box>
 
           {/* Communication Section */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "5px", marginBottom: "16px", border: "1px solid #292929", borderRadius: "10px", padding: "1rem", backgroundColor: "#191919" }}>
-            <h3 style={{ color: "#7a858d", display: "flex", alignItems: "center", fontSize: "14px", marginBottom: "5px" }}>
+          <Box display="flex" flexDirection="column" gap="5px" marginBottom="16px" border="1px solid #292929" borderRadius="10px" padding="1rem" backgroundColor="#191919">
+            <Text color="#7a858d" display="flex" alignItems="center" fontSize="14px" marginBottom="5px">
               <HiOutlineLightningBolt style={{ marginRight: "8px", marginTop: "0.5px" }} />
               Communication
-            </h3>
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
-              <span>Style</span>
-              <span>{"Concise"}</span> {/* Adjust as necessary */}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#7a858d", fontSize: "14px" }}>
-              <span>Response Length</span>
-              <span>{"Short"}</span> {/* Adjust as necessary */}
-            </div>
-          </div>
-        </div>
+            </Text>
+            <Flex justifyContent="space-between" color="#7a858d" fontSize="14px">
+              <Text>Style</Text>
+              <Text>{"Concise"}</Text>
+            </Flex>
+            <Flex justifyContent="space-between" color="#7a858d" fontSize="14px">
+              <Text>Response Length</Text>
+              <Text>{"Short"}</Text>
+            </Flex>
+          </Box>
+        </Box>
       </Flex>
-    </div>
+    </Box>
   );
 }
