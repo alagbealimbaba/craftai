@@ -18,18 +18,19 @@ export const UserExperienceItem = ({ experience }) => {
   });
 
   return (
-    <MotionBox
-      ref={ref} // Attach the ref to the MotionBox
-      bg="whiteAlpha.50"
-      p={6}
-      borderRadius="lg"
-      boxShadow="lg"
-      transition="all 0.3s"
-      _hover={{ bg: "gray.800", transform: "scale(1.05)" }}
-      initial={{ opacity: 0, y: 20 }} // Initial state for animation
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // Animate based on visibility
-      transition={{ duration: 0.5 }} // Single transition
-    >
+<MotionBox
+  ref={ref} // Attach the ref to the MotionBox
+  bg="whiteAlpha.50"
+  p={6}
+  borderRadius="lg"
+  textAlign="left"
+  boxShadow="lg"
+  _hover={{ bg: "gray.800", transform: "scale(1.05)" }}
+  transition="all 0.3s" // Single transition for hover effect
+  initial={{ opacity: 0, y: 20 }}
+  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // Animate based on visibility
+>
+
       <Text fontSize="xl" textAlign={"left"} color="gray.300" mb={4}>
         "{quote}"
       </Text>

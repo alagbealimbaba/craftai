@@ -19,18 +19,18 @@ export const CategoryItem = ({ data }) => {
 
   return (
     <MotionBox
-      ref={ref} // Attach the ref to the MotionBox
-      bg="whiteAlpha.50"
-      p={6}
-      borderRadius="lg"
-      textAlign="left"
-      boxShadow="lg"
-      _hover={{ bg: 'gray.800', transform: 'scale(1.05)' }}
-      transition="all 0.3s"
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // Animate based on visibility
-      transition={{ duration: 0.5 }} // Single transition
-    >
+    ref={ref} // Attach the ref to the MotionBox
+    bg="whiteAlpha.50"
+    p={6}
+    borderRadius="lg"
+    textAlign="left"
+    boxShadow="lg"
+    _hover={{ bg: "gray.800", transform: "scale(1.05)" }}
+    transition="all 0.3s" // Single transition for hover effect
+    initial={{ opacity: 0, y: 20 }}
+    animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // Animate based on visibility
+  >
+  
       <Text fontSize="3xl" mb={4}>
         {icon}
       </Text>

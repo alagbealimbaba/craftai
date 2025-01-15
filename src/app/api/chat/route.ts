@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-export const runtime = 'edge'; // Use Edge Runtime for optimal infrastructure
+export const runtime = 'nodejs'; // Use Edge Runtime for optimal infrastructure
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Your API key

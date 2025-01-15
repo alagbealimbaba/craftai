@@ -13,11 +13,22 @@ import {
   Spinner,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { FiMic, FiCalendar, FiSend } from "react-icons/fi";
 import { HiLightBulb, HiMap } from "react-icons/hi";
 
-export default function ChatPage() {
+// Suspense boundary to wrap components using CSR features
+const ChatPageWithSuspense = () => {
+  return (
+    <Suspense fallback={<Spinner size="lg" color="teal.300" />}>
+      <ChatPage />
+    </Suspense>
+  );
+};
+
+export default ChatPageWithSuspense;
+
+function ChatPage() {
   const searchParams = useSearchParams();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -101,12 +112,12 @@ export default function ChatPage() {
 
       {/* Suggested Questions */}
       <SimpleGrid columns={{ base: 2, md: 4 }} gap={2} mb={4} maxW="100%">
-        {[
-          { text: "What's the best weather to you?", icon: HiLightBulb },
-          { text: "Share the simplest tips for writing an essay", icon: HiMap },
-          { text: "What does React.js do?", icon: FiCalendar },
-          { text: "Recommend some books I can read", icon: FiMic },
-        ].map((item, index) => (
+      {[
+    { icon: FiMic, text: "tell me the best way to put out a fire" },
+    { icon: HiLightBulb, text: "give me an idea on how to pass my test" },
+    { icon: FiCalendar, text: "what date did evolution start?" },
+    { icon: HiMap, text: "give me the location of the world's largest bank" }
+  ].map((item, index) => (
           <Box
             key={index}
             p={{ base: 2, md: 4 }}
@@ -148,9 +159,7 @@ export default function ChatPage() {
           {messages.map((message) => (
             <HStack
               key={message.id}
-              justifyContent={
-                message.role === "assistant" ? "flex-end" : "flex-start"
-              }
+              justifyContent={message.role === "assistant" ? "flex-end" : "flex-start"}
             >
               <Box
                 p={{ base: 2, md: 3 }}
