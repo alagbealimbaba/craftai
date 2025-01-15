@@ -13,14 +13,15 @@ import {
   Spinner,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { useChat } from "ai/react";
 import { useEffect, useState, useRef } from "react";
 import { FiMic, FiCalendar, FiSend } from "react-icons/fi";
 import { HiLightBulb, HiMap } from "react-icons/hi";
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
-  const { input, handleInputChange, handleSubmit, messages, isLoading } = useChat();
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [parsedAgent, setParsedAgent] = useState(null);
   const messagesEndRef = useRef(null); // Reference for scrolling
 
@@ -42,6 +43,43 @@ export default function ChatPage() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!input.trim()) return;
+
+    // Add user message to state
+    const userMessage = { id: Date.now(), role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      // Call the API
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch response");
+      }
+
+      const data = await response.json();
+      const assistantMessage = data.choices[0].message;
+
+      // Add assistant message to state
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Flex
@@ -79,9 +117,7 @@ export default function ChatPage() {
             cursor="pointer"
             textAlign="center"
             _hover={{ bg: "gray.700" }}
-            onClick={() =>
-              handleInputChange({ target: { value: item.text } })
-            }
+            onClick={() => setInput(item.text)}
           >
             <VStack spacing={1}>
               <item.icon size="20" />
@@ -95,7 +131,7 @@ export default function ChatPage() {
       <Box
         bg="gray.900"
         p={{ base: 2, md: 4 }}
-        width={{base:'100%', md:'80%'}}
+        width={{ base: "100%", md: "80%" }}
         maxW="100%"
         flex="1"
         borderRadius="md"
@@ -148,7 +184,7 @@ export default function ChatPage() {
 
       {/* Input Area */}
       <HStack
-        width={{base:'100%', md:'80%'}}
+        width={{ base: "100%", md: "80%" }}
         maxW="100%"
         bg="gray.800"
         borderRadius="md"

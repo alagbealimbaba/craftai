@@ -34,7 +34,7 @@ export default function Page() {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        color="white"
+        color={"white"}
       >
         CRAFT
       </MotionText>
