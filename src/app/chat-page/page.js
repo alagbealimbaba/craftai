@@ -103,7 +103,7 @@ function ChatPage() {
       p={{ base: 2, md: 4 }}
     >
       {/* Header Section */}
-      <Heading as="h1" size={{ base: "lg", md: "2xl" }} mb={2} color="teal.300" textAlign="center">
+      <Heading as="h1" size={{ base: "lg", md: "2xl" }} mb={2} color="white" textAlign="center">
         Hello, User
       </Heading>
       <Text fontSize={{ base: "sm", md: "lg" }} color="fg.muted" mb={4} textAlign="center">
@@ -123,7 +123,7 @@ function ChatPage() {
             p={{ base: 2, md: 4 }}
             borderRadius="md"
             bg="gray.800"
-            color="teal.300"
+            color="white"
             boxShadow="lg"
             cursor="pointer"
             textAlign="center"
@@ -164,7 +164,7 @@ function ChatPage() {
               <Box
                 p={{ base: 2, md: 3 }}
                 borderRadius="md"
-                bg={message.role === "assistant" ? "teal.500" : "teal.700"}
+                bg={message.role === "assistant" ? "#4a90e2" : "gray.800"}
                 maxWidth="80%"
                 boxShadow="md"
               >
@@ -218,7 +218,7 @@ function ChatPage() {
           colorScheme="teal"
           variant="ghost"
           onClick={handleSubmit}
-          bg="teal.600"
+          bg="white"
           _hover={{ bg: "teal.700" }}
           size="sm"
         >
