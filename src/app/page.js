@@ -26,6 +26,17 @@ export default function Page() {
       overflowX="hidden"
       px={[4, 6, 10]} // Adjust padding for small, medium, and larger screens
     >
+     <MotionText
+        fontSize={["2xl", "3xl", "3xl"]} // Responsive font sizes
+        fontWeight="bold"
+        mt={["30px", "50px"]} // Adjust margin for smaller screens
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        color={"white"}
+      >
+        CA: TBA
+      </MotionText>
       {/* Heading Section */}
       <MotionText
         fontSize={["4xl", "6xl", "8xl"]} // Responsive font sizes

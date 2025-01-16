@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text, HStack, Button, Image } from '@chakra-ui/react';
 import Link from 'next/link';
-import { FaSuperpowers, FaUserAstronaut, FaUserGroup } from 'react-icons/fa6';
+import { FaSuperpowers, FaTwitter, FaUserAstronaut, FaUserGroup } from 'react-icons/fa6';
 
 const Navbar = () => {
   return (
@@ -23,30 +23,45 @@ const Navbar = () => {
             </Text>
           </Box>
         </Link>
-        <HStack spacing={4}>
-          <a href="/my-agents">
-            <Button
-              fontSize={{ base: 'sm', md: 'md', lg: '18px' }} // Responsive font sizes
-              variant="link"
-              color="white"
-              textDecoration="none"
-            >
-              <FaUserGroup />
-              MY AGENTS
-            </Button>
-          </a>
-          <a href="explore-agents">
-            <Button
-              fontSize={{ base: 'sm', md: 'md', lg: '18px' }} // Responsive font sizes
-              variant="link"
-              color="white"
-              textDecoration="none"
-            >
-              <FaUserAstronaut />
-              AI AGENTS
-            </Button>
-          </a>
-        </HStack>
+        <HStack spacing={{ base: 0, md: 4 }}>
+  <a href="/my-agents">
+    <Button
+      fontSize={{ base: 'xs', md: 'md', lg: '18px' }} // Smaller text on mobile
+      variant="link"
+      color="white"
+      textDecoration="none"
+      w={{ base: 'auto', md: 'auto' }} // Make button width auto to fit content
+    >
+      <FaUserGroup />
+      <Text display={{ base: 'none', md: 'inline' }}>MY AGENTS</Text> {/* Hide text on mobile */}
+    </Button>
+  </a>
+  <a href="explore-agents">
+    <Button
+      fontSize={{ base: 'xs', md: 'md', lg: '18px' }} // Smaller text on mobile
+      variant="link"
+      color="white"
+      textDecoration="none"
+      w={{ base: 'auto', md: 'auto' }} // Make button width auto to fit content
+    >
+      <FaUserAstronaut />
+      <Text display={{ base: 'none', md: 'inline' }}>AI AGENTS</Text> {/* Hide text on mobile */}
+    </Button>
+  </a>
+  <a href="https://x.com/CraftsolAI" target="_blank" rel="noopener noreferrer">
+    <Button
+      fontSize={{ base: 'sm', md: 'md', lg: '18px' }} // Responsive font sizes
+      variant="link"
+      color="white"
+      textDecoration="none"
+      w={{ base: 'auto', md: 'auto' }} // Make button width auto to fit content
+    >
+      <FaTwitter />
+      <Text display={{ base: 'none', md: 'inline' }}>TWITTER</Text> {/* Hide text only for Twitter on mobile */}
+    </Button>
+  </a>
+</HStack>
+
       </Flex>
     </Box>
   );
