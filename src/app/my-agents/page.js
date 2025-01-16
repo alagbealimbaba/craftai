@@ -62,7 +62,7 @@ const MyAgentsPage = () => {
 
       {/* Page Title */}
       <Text display={"flex"} fontSize="32px" fontWeight="bold" my="10px">
-        <img src='/crateBg.png' width={"50px"} height={"10px"} alt="Background" /> MY AGENTS
+    MY AGENTS
       </Text>
       <Text fontSize="xl" color={"whiteAlpha.600"} mb="20px">
         Your personal collection of custom AI agents
