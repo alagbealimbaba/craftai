@@ -169,7 +169,7 @@ function ChatPage() {
                 boxShadow="md"
               >
                 <Text color="white" fontWeight="bold" mb={1} fontSize="sm">
-                  {message.role === "assistant" ? "CraftAI" : "You"}
+                  {message.role === "assistant" ? "Craft" : "You"}
                 </Text>
                 <Text fontSize="sm">
                   {message.content.split("\n").map((textBlock, index) => (
